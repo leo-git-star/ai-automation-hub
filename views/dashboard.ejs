@@ -4,187 +4,187 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI 自动化工作流 - 管理面板</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f7fafc; }
-    .sidebar { width: 250px; background: white; height: 100vh; position: fixed; left: 0; top: 0; padding: 20px; box-shadow: 2px 0 10px rgba(0,0,0,0.05); }
-    .sidebar h2 { margin-bottom: 30px; color: #667eea; font-size: 20px; }
-    .sidebar a { display: block; padding: 12px 15px; margin-bottom: 8px; text-decoration: none; color: #4a5568; border-radius: 8px; transition: all 0.2s; }
-    .sidebar a:hover { background: #f0f0ff; color: #667eea; }
-    .sidebar a.active { background: #667eea; color: white; }
-    .main-content { margin-left: 250px; padding: 30px; }
-    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-    .header h1 { font-size: 28px; color: #1a202c; }
-    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
-    .stat-card { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-    .stat-card .icon { font-size: 28px; margin-bottom: 10px; }
-    .stat-card .number { font-size: 32px; font-weight: bold; color: #1a202c; }
-    .stat-card .label { font-size: 14px; color: #718096; margin-top: 5px; }
-    .section { background: white; border-radius: 12px; padding: 25px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-    .section h3 { font-size: 18px; margin-bottom: 20px; color: #2d3748; }
-    .table { width: 100%; border-collapse: collapse; }
-    .table th, .table td { padding: 12px; text-align: left; border-bottom: 1px solid #e2e8f0; }
-    .table th { background: #f7fafc; font-weight: 600; color: #4a5568; }
-    .badge { padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
-    .badge.success { background: #dcfce7; color: #16a34a; }
-    .badge.warning { background: #fef3c7; color: #d97706; }
-    .badge.danger { background: #fee2e2; color: #dc2626; }
-    .badge.info { background: #e0e7ff; color: #4338ca; }
-    .btn { padding: 8px 16px; border: none; border-radius: 6px; font-size: 14px; cursor: pointer; }
-    .btn-primary { background: #667eea; color: white; }
-    .btn-primary:hover { background: #5a6fd6; }
-    .btn-secondary { background: #f7fafc; color: #4a5568; border: 1px solid #e2e8f0; }
-    .btn-secondary:hover { background: #edf2f7; }
-    .progress-bar { height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden; }
-    .progress-fill { height: 100%; background: linear-gradient(90deg, #667eea, #764ba2); border-radius: 4px; }
-    .contract-row:hover { background: #f7fafc; }
-    .message-row:hover { background: #f7fafc; }
-    .due-7 { color: #dc2626; font-weight: bold; }
-    .due-30 { color: #d97706; }
-    .notification-item { padding: 15px; border-bottom: 1px solid #e2e8f0; }
-    .notification-item:last-child { border-bottom: none; }
-    .notification-item.unread { background: #f7fafc; }
-    .notification-time { font-size: 12px; color: #a0aec0; margin-top: 5px; }
-  </style>
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   <div class="sidebar">
-    <h2>🤖 AI 自动化</h2>
-    <a href="/" class="active">仪表盘</a>
-    <a href="/demo">演示中心</a>
-    <a href="/automations">自动化规则</a>
-    <a href="/contracts">合同管理</a>
-    <a href="/messages">消息管理</a>
-    <a href="/reports">日报管理</a>
-    <a href="/tasks">任务管理</a>
-    <a href="/notifications">通知中心</a>
+    <div class="sidebar-header">
+      <h2>🤖 AI 自动化</h2>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="/" class="active">
+        <span class="icon">📊</span>
+        <span>仪表盘</span>
+      </a>
+      <a href="/demo">
+        <span class="icon">🎯</span>
+        <span>演示中心</span>
+      </a>
+      <a href="/automations">
+        <span class="icon">⚙️</span>
+        <span>自动化规则</span>
+      </a>
+      <a href="/contracts">
+        <span class="icon">📄</span>
+        <span>合同管理</span>
+      </a>
+      <a href="/messages">
+        <span class="icon">💬</span>
+        <span>消息管理</span>
+      </a>
+      <a href="/reports">
+        <span class="icon">📈</span>
+        <span>日报管理</span>
+      </a>
+      <a href="/tasks">
+        <span class="icon">✅</span>
+        <span>任务管理</span>
+      </a>
+      <a href="/notifications">
+        <span class="icon">🔔</span>
+        <span>通知中心</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="/llm-config">
+        <span class="icon">🔧</span>
+        <span>LLM配置</span>
+      </a>
+    </div>
   </div>
   
   <div class="main-content">
-    <div class="header">
-      <h1>欢迎回来，管理员</h1>
+    <div class="page-header">
       <div>
-        <span style="color:#718096;">上次登录：刚刚</span>
+        <h1>欢迎回来，管理员</h1>
+        <div class="subtitle">上次登录：刚刚</div>
       </div>
     </div>
     
     <div class="stats-grid">
       <div class="stat-card">
-        <div class="icon">📝</div>
-        <div class="number"><%= stats?.totalContracts || 0 %></div>
-        <div class="label">合同总数</div>
+        <div class="stat-icon">📝</div>
+        <div class="stat-number"><%= stats?.totalContracts || 0 %></div>
+        <div class="stat-label">合同总数</div>
       </div>
       <div class="stat-card">
-        <div class="icon">⚠️</div>
-        <div class="number"><%= stats?.expiringContracts || 0 %></div>
-        <div class="label">即将到期</div>
+        <div class="stat-icon">⚠️</div>
+        <div class="stat-number"><%= stats?.expiringContracts || 0 %></div>
+        <div class="stat-label">即将到期</div>
       </div>
       <div class="stat-card">
-        <div class="icon">💬</div>
-        <div class="number"><%= stats?.recentMessages || 0 %></div>
-        <div class="label">客户咨询</div>
+        <div class="stat-icon">💬</div>
+        <div class="stat-number"><%= stats?.recentMessages || 0 %></div>
+        <div class="stat-label">客户咨询</div>
       </div>
       <div class="stat-card">
-        <div class="icon">⚙️</div>
-        <div class="number"><%= stats?.activeAutomations || 0 %></div>
-        <div class="label">运行中规则</div>
+        <div class="stat-icon">⚙️</div>
+        <div class="stat-number"><%= stats?.activeAutomations || 0 %></div>
+        <div class="stat-label">运行中规则</div>
       </div>
     </div>
     
-    <div style="display:grid; grid-template-columns: 2fr 1fr; gap:20px;">
-      <div class="section">
-        <h3>📅 即将到期的合同</h3>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>客户名称</th>
-              <th>合同编号</th>
-              <th>到期日期</th>
-              <th>剩余天数</th>
-              <th>金额</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% (expiringContracts || []).slice(0, 5).forEach(c => { %>
-              <tr class="contract-row">
-                <td><%= c.customer_name %></td>
-                <td><%= c.contract_no %></td>
-                <td><%= c.end_date %></td>
-                <td class="<%= (c.daysLeft || 0) <= 7 ? 'due-7' : 'due-30' %>">
-                  <%= (c.daysLeft || 0) %>天
-                </td>
-                <td>¥<%= c.amount.toLocaleString() %></td>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">📅 即将到期的合同</span>
+          <a href="/contracts" class="btn btn-sm btn-secondary">查看全部</a>
+        </div>
+        <div class="table-container">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>客户名称</th>
+                <th>合同编号</th>
+                <th>到期日期</th>
+                <th>剩余天数</th>
+                <th>金额</th>
               </tr>
-            <% }) %>
-          </tbody>
-        </table>
-        <div style="text-align:right; margin-top:10px;">
-          <a href="/contracts" class="btn btn-secondary">查看全部</a>
+            </thead>
+            <tbody>
+              <% (expiringContracts || []).slice(0, 5).forEach(c => { %>
+                <tr>
+                  <td><%= c.customer_name %></td>
+                  <td><%= c.contract_no %></td>
+                  <td><%= c.end_date %></td>
+                  <td class="<%= (c.daysLeft || 0) <= 7 ? 'due-7' : 'due-30' %>">
+                    <%= (c.daysLeft || 0) %>天
+                  </td>
+                  <td>¥<%= c.amount.toLocaleString() %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
         </div>
       </div>
       
-      <div class="section">
-        <h3>🔔 最新通知</h3>
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">🔔 最新通知</span>
+          <a href="/notifications" class="btn btn-sm btn-secondary">查看全部</a>
+        </div>
         <div style="max-height:300px; overflow-y:auto;">
           <% (notifications || []).slice(0, 5).forEach(n => { %>
             <div class="notification-item <%= n.read ? '' : 'unread' %>">
-              <div style="color:#2d3748;"><%= n.message %></div>
+              <div><%= n.message %></div>
               <div class="notification-time"><%= n.created_at %></div>
             </div>
           <% }) %>
         </div>
-        <div style="text-align:right; margin-top:10px;">
-          <a href="/notifications" class="btn btn-secondary">查看全部</a>
-        </div>
       </div>
     </div>
     
-    <div style="display:grid; grid-template-columns: 2fr 1fr; gap:20px;">
-      <div class="section">
-        <h3>💬 最近客户咨询</h3>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>内容</th>
-              <th>分类</th>
-              <th>客户</th>
-              <th>时间</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% (recentMessages || []).slice(0, 5).forEach(m => { %>
-              <tr class="message-row">
-                <td style="max-width:300px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"><%= m.content %></td>
-                <td><span class="badge <%= m.classification === '报价咨询' ? 'warning' : m.classification === '工期咨询' ? 'info' : m.classification === '预约到店' ? 'success' : 'info' %>"><%= m.classification %></span></td>
-                <td><%= m.customer_name || '未知' %></td>
-                <td><%= m.created_at %></td>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">💬 最近客户咨询</span>
+          <a href="/messages" class="btn btn-sm btn-secondary">查看全部</a>
+        </div>
+        <div class="table-container">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>内容</th>
+                <th>分类</th>
+                <th>客户</th>
+                <th>时间</th>
               </tr>
-            <% }) %>
-          </tbody>
-        </table>
-        <div style="text-align:right; margin-top:10px;">
-          <a href="/messages" class="btn btn-secondary">查看全部</a>
+            </thead>
+            <tbody>
+              <% (recentMessages || []).slice(0, 5).forEach(m => { %>
+                <tr>
+                  <td class="truncate" style="max-width:200px;"><%= m.content %></td>
+                  <td>
+                    <% const classMap = { '报价咨询': 'badge-warning', '工期咨询': 'badge-info', '材料咨询': 'badge-success', '案例查看': 'badge-purple', '预约到店': 'badge-primary', '其他': 'badge-info' }; %>
+                    <span class="badge <%= classMap[m.classification] || 'badge-info' %>"><%= m.classification %></span>
+                  </td>
+                  <td><%= m.customer_name || '未知' %></td>
+                  <td><%= m.created_at %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
         </div>
       </div>
       
-      <div class="section">
-        <h3>⚙️ 自动化规则状态</h3>
-        <div style="display:flex; flex-direction:column; gap:15px;">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">⚙️ 自动化规则状态</span>
+          <a href="/automations" class="btn btn-sm btn-secondary">管理规则</a>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:var(--spacing-lg);">
           <% (automations || []).forEach(a => { %>
             <div>
-              <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+              <div style="display:flex; justify-content:space-between; margin-bottom:var(--spacing-sm);">
                 <span style="font-weight:500;"><%= a.name %></span>
-                <span class="badge <%= a.enabled ? 'success' : 'danger' %>"><%= a.enabled ? '运行中' : '已停止' %></span>
+                <span class="badge <%= a.enabled ? 'badge-success' : 'badge-danger' %>"><%= a.enabled ? '运行中' : '已停止' %></span>
               </div>
               <div class="progress-bar">
                 <div class="progress-fill" style="width:<%= Math.min(a.run_count * 10, 100) %>%"></div>
               </div>
-              <div style="font-size:12px; color:#a0aec0; margin-top:5px;">已执行 <%= a.run_count %> 次</div>
+              <div class="text-xs text-muted mt-sm">已执行 <%= a.run_count %> 次</div>
             </div>
           <% }) %>
-        </div>
-        <div style="text-align:right; margin-top:15px;">
-          <a href="/automations" class="btn btn-secondary">管理规则</a>
         </div>
       </div>
     </div>

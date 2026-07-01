@@ -4,75 +4,85 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LLM配置 - AI Automation Hub</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f7fa; color: #333; }
-    .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px 40px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-    .header h1 { font-size: 24px; font-weight: 600; }
-    .nav { margin-top: 10px; }
-    .nav a { color: rgba(255,255,255,0.8); text-decoration: none; margin-right: 20px; font-size: 14px; transition: color 0.3s; }
-    .nav a:hover, .nav a.active { color: white; font-weight: 500; }
-    .container { max-width: 900px; margin: 30px auto; padding: 0 20px; }
-    .card { background: white; border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-    .card h2 { font-size: 18px; margin-bottom: 20px; color: #2d3748; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
-    .form-group { margin-bottom: 20px; }
-    .form-group label { display: block; font-size: 14px; font-weight: 500; margin-bottom: 8px; color: #4a5568; }
-    .form-group select, .form-group input { width: 100%; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 14px; transition: border-color 0.3s; background: white; }
-    .form-group select:focus, .form-group input:focus { outline: none; border-color: #667eea; }
-    .form-group .hint { font-size: 12px; color: #718096; margin-top: 6px; }
-    .btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 12px 32px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
-    .btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(102,126,234,0.4); }
-    .btn:active { transform: translateY(0); }
-    .btn-secondary { background: #e2e8f0; color: #4a5568; }
-    .btn-secondary:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-    .model-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
-    .model-item { border: 2px solid #e2e8f0; border-radius: 8px; padding: 16px; cursor: pointer; transition: all 0.3s; }
-    .model-item:hover { border-color: #667eea; background: #f7fafc; }
-    .model-item.selected { border-color: #667eea; background: #f0f4ff; }
-    .model-item .name { font-weight: 600; color: #2d3748; }
-    .model-item .note { font-size: 12px; color: #718096; margin-top: 4px; }
-    .platform-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
-    .platform-tab { padding: 8px 16px; border: 2px solid #e2e8f0; border-radius: 8px; background: white; cursor: pointer; font-size: 14px; transition: all 0.3s; }
-    .platform-tab:hover { border-color: #667eea; }
-    .platform-tab.active { background: #667eea; color: white; border-color: #667eea; }
-    .status { padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 14px; }
-    .status.success { background: #d4edda; color: #155724; }
-    .status.warning { background: #fff3cd; color: #856404; }
-    .status.error { background: #f8d7da; color: #721c24; }
-    .api-key-tip { background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px; margin-top: 8px; border-radius: 0 8px 8px 0; font-size: 12px; }
-    .test-section { margin-top: 24px; padding-top: 20px; border-top: 2px dashed #e2e8f0; }
-    .test-result { margin-top: 12px; padding: 12px; border-radius: 8px; font-family: monospace; font-size: 13px; }
-    .loading { display: inline-block; width: 20px; height: 20px; border: 2px solid #fff; border-radius: 50%; border-top-color: transparent; animation: spin 0.6s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-  </style>
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  <div class="header">
-    <h1>AI Automation Hub</h1>
-    <div class="nav">
-      <a href="/">仪表盘</a>
-      <a href="/demo">演示页面</a>
-      <a href="/automations">自动化规则</a>
-      <a href="/llm-config" class="active">LLM配置</a>
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h2>🤖 AI 自动化</h2>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="/">
+        <span class="icon">📊</span>
+        <span>仪表盘</span>
+      </a>
+      <a href="/demo">
+        <span class="icon">🎯</span>
+        <span>演示中心</span>
+      </a>
+      <a href="/automations">
+        <span class="icon">⚙️</span>
+        <span>自动化规则</span>
+      </a>
+      <a href="/contracts">
+        <span class="icon">📄</span>
+        <span>合同管理</span>
+      </a>
+      <a href="/messages">
+        <span class="icon">💬</span>
+        <span>消息管理</span>
+      </a>
+      <a href="/reports">
+        <span class="icon">📈</span>
+        <span>日报管理</span>
+      </a>
+      <a href="/tasks">
+        <span class="icon">✅</span>
+        <span>任务管理</span>
+      </a>
+      <a href="/notifications">
+        <span class="icon">🔔</span>
+        <span>通知中心</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="/llm-config" class="active">
+        <span class="icon">🔧</span>
+        <span>LLM配置</span>
+      </a>
     </div>
   </div>
-
-  <div class="container">
+  
+  <div class="main-content">
+    <div class="page-header">
+      <div>
+        <h1>LLM 模型配置</h1>
+        <div class="subtitle">配置AI模型参数，启用真实AI处理能力</div>
+      </div>
+    </div>
+    
     <div class="card">
-      <h2>🤖 LLM模型配置</h2>
+      <div class="card-header">
+        <span class="card-title">🤖 模型配置</span>
+      </div>
       
       <% if (config.enabled && config.key) { %>
-        <div class="status success">✓ 已配置API Key，将使用真实AI模型进行处理</div>
+        <div class="result-box success" style="margin-bottom:var(--spacing-lg);">
+          ✓ 已配置API Key，将使用真实AI模型进行处理
+        </div>
       <% } else { %>
-        <div class="status warning">⚠️ 未配置API Key，当前使用模拟AI响应</div>
+        <div class="result-box warning" style="margin-bottom:var(--spacing-lg);">
+          ⚠️ 未配置API Key，当前使用模拟AI响应
+        </div>
       <% } %>
 
       <form id="configForm">
         <div class="form-group">
           <label>选择平台</label>
-          <div class="platform-tabs">
+          <div style="display:flex; gap:var(--spacing-sm); flex-wrap:wrap;">
             <% Object.keys(models.platform_meta).forEach(platform => { %>
-              <button type="button" class="platform-tab <%= config.platform === platform ? 'active' : '' %>" data-platform="<%= platform %>">
+              <button type="button" class="btn <%= config.platform === platform ? 'btn-primary' : 'btn-secondary' %>" 
+                      data-platform="<%= platform %>">
                 <%= models.platform_meta[platform].label %>
               </button>
             <% }) %>
@@ -82,13 +92,14 @@
 
         <div class="form-group">
           <label>选择模型</label>
-          <div class="model-list" id="modelList">
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:var(--spacing-md);">
             <% Object.keys(models.platforms).forEach(platform => { %>
               <% models.platforms[platform].forEach(model => { %>
-                <div class="model-item <%= config.platform === platform && config.model === model.id ? 'selected' : '' %>" 
+                <div class="card <%= config.platform === platform && config.model === model.id ? 'selected-model' : '' %>" 
+                     style="cursor:pointer; border-color:<%= config.platform === platform && config.model === model.id ? 'var(--primary)' : 'var(--border-color)' %>;"
                      data-platform="<%= platform %>" data-model="<%= model.id %>">
-                  <div class="name"><%= model.name %></div>
-                  <div class="note"><%= model.note %></div>
+                  <div style="font-weight:600; color:var(--text-primary); margin-bottom:var(--spacing-xs);"><%= model.name %></div>
+                  <div class="text-xs text-muted"><%= model.note %></div>
                 </div>
               <% }) %>
             <% }) %>
@@ -99,37 +110,41 @@
         <div class="form-group">
           <label>API Key</label>
           <input type="password" id="api_key" name="api_key" placeholder="输入您的API Key" value="<%= config.key ? '****************' : '' %>">
-          <div class="api-key-tip">
-            💡 获取免费API Key：
-            <ul style="margin-top: 4px; padding-left: 16px;">
-              <li>智谱AI: <a href="https://open.bigmodel.cn/" target="_blank">https://open.bigmodel.cn/</a></li>
-              <li>硅基流动: <a href="https://www.siliconflow.cn/" target="_blank">https://www.siliconflow.cn/</a></li>
-              <li>Google Gemini: <a href="https://ai.google.dev/" target="_blank">https://ai.google.dev/</a></li>
+          <div class="result-box" style="margin-top:var(--spacing-sm); border-left-color:var(--info);">
+            <strong>💡 获取免费API Key：</strong>
+            <ul style="margin-top:var(--spacing-sm); padding-left:var(--spacing-lg);">
+              <li>智谱AI: <a href="https://open.bigmodel.cn/" target="_blank" style="color:var(--primary-light);">https://open.bigmodel.cn/</a></li>
+              <li>硅基流动: <a href="https://www.siliconflow.cn/" target="_blank" style="color:var(--primary-light);">https://www.siliconflow.cn/</a></li>
+              <li>Google Gemini: <a href="https://ai.google.dev/" target="_blank" style="color:var(--primary-light);">https://ai.google.dev/</a></li>
             </ul>
           </div>
         </div>
 
-        <button type="submit" class="btn">保存配置</button>
+        <button type="submit" class="btn btn-primary">保存配置</button>
       </form>
 
-      <div class="test-section">
-        <h3 style="font-size: 16px; margin-bottom: 12px;">测试连接</h3>
+      <div style="margin-top:var(--spacing-xl); padding-top:var(--spacing-lg); border-top:1px solid var(--border-color);">
+        <h3 style="font-size:var(--font-size-base); font-weight:600; margin-bottom:var(--spacing-md); color:var(--text-primary);">测试连接</h3>
         <button class="btn btn-secondary" id="testBtn">测试AI模型</button>
-        <div id="testResult"></div>
+        <div id="testResult" style="margin-top:var(--spacing-md);"></div>
       </div>
     </div>
   </div>
 
   <script>
-    const platformTabs = document.querySelectorAll('.platform-tab');
-    const modelItems = document.querySelectorAll('.model-item');
+    const platformTabs = document.querySelectorAll('[data-platform]');
+    const modelItems = document.querySelectorAll('[data-model]');
     const platformInput = document.getElementById('platform');
     const modelInput = document.getElementById('model');
 
     platformTabs.forEach(tab => {
       tab.addEventListener('click', () => {
-        platformTabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
+        platformTabs.forEach(t => {
+          t.classList.remove('btn-primary');
+          t.classList.add('btn-secondary');
+        });
+        tab.classList.remove('btn-secondary');
+        tab.classList.add('btn-primary');
         platformInput.value = tab.dataset.platform;
         
         modelItems.forEach(item => {
@@ -144,15 +159,16 @@
 
     modelItems.forEach(item => {
       item.addEventListener('click', () => {
-        modelItems.forEach(i => i.classList.remove('selected'));
-        item.classList.add('selected');
+        modelItems.forEach(i => {
+          i.style.borderColor = 'var(--border-color)';
+        });
+        item.style.borderColor = 'var(--primary)';
         platformInput.value = item.dataset.platform;
         modelInput.value = item.dataset.model;
         
         platformTabs.forEach(tab => {
-          tab.classList.remove('active');
           if (tab.dataset.platform === item.dataset.platform) {
-            tab.classList.add('active');
+            tab.click();
           }
         });
       });
@@ -183,7 +199,7 @@
       const resultDiv = document.getElementById('testResult');
       
       btn.disabled = true;
-      btn.innerHTML = '<span class="loading"></span> 测试中...';
+      btn.innerHTML = '<span class="spinner"></span> 测试中...';
       resultDiv.innerHTML = '';
 
       try {
@@ -195,20 +211,14 @@
         
         const result = await response.json();
         if (result.success) {
-          resultDiv.className = 'test-result';
-          resultDiv.style.background = '#d4edda';
-          resultDiv.style.color = '#155724';
+          resultDiv.className = 'result-box success';
           resultDiv.innerHTML = `✓ 测试成功！<br>分类结果：${result.data.classification}<br>置信度：${result.data.confidence}`;
         } else {
-          resultDiv.className = 'test-result';
-          resultDiv.style.background = '#f8d7da';
-          resultDiv.style.color = '#721c24';
+          resultDiv.className = 'result-box error';
           resultDiv.innerHTML = '✗ 测试失败：' + result.error;
         }
       } catch (error) {
-        resultDiv.className = 'test-result';
-        resultDiv.style.background = '#f8d7da';
-        resultDiv.style.color = '#721c24';
+        resultDiv.className = 'result-box error';
         resultDiv.innerHTML = '✗ 测试失败：' + error.message;
       } finally {
         btn.disabled = false;
@@ -216,7 +226,7 @@
       }
     });
 
-    document.querySelectorAll('.model-item').forEach(item => {
+    document.querySelectorAll('[data-model]').forEach(item => {
       if (item.dataset.platform !== platformInput.value) {
         item.style.display = 'none';
       }

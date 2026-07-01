@@ -4,67 +4,84 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>通知中心</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f7fafc; }
-    .sidebar { width: 250px; background: white; height: 100vh; position: fixed; left: 0; top: 0; padding: 20px; box-shadow: 2px 0 10px rgba(0,0,0,0.05); }
-    .sidebar h2 { margin-bottom: 30px; color: #667eea; font-size: 20px; }
-    .sidebar a { display: block; padding: 12px 15px; margin-bottom: 8px; text-decoration: none; color: #4a5568; border-radius: 8px; transition: all 0.2s; }
-    .sidebar a:hover { background: #f0f0ff; color: #667eea; }
-    .sidebar a.active { background: #667eea; color: white; }
-    .main-content { margin-left: 250px; padding: 30px; }
-    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-    .header h1 { font-size: 28px; color: #1a202c; }
-    .btn { padding: 10px 20px; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; }
-    .btn-primary { background: #667eea; color: white; }
-    .btn-secondary { background: #f7fafc; color: #4a5568; border: 1px solid #e2e8f0; }
-    .section { background: white; border-radius: 12px; padding: 25px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-    .notification-item { padding: 20px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: flex-start; }
-    .notification-item:last-child { border-bottom: none; }
-    .notification-item.unread { background: #f7fafc; border-left: 4px solid #667eea; }
-    .notification-content { flex: 1; }
-    .notification-content h4 { margin-bottom: 5px; color: #2d3748; }
-    .notification-content p { color: #718096; }
-    .notification-time { font-size: 12px; color: #a0aec0; margin-top: 5px; }
-    .badge { padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
-    .badge.info { background: #e0e7ff; color: #4338ca; }
-    .badge.warning { background: #fef3c7; color: #d97706; }
-    .badge.success { background: #dcfce7; color: #16a34a; }
-  </style>
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   <div class="sidebar">
-    <h2>🤖 AI 自动化</h2>
-    <a href="/">仪表盘</a>
-    <a href="/demo">演示中心</a>
-    <a href="/automations">自动化规则</a>
-    <a href="/contracts">合同管理</a>
-    <a href="/messages">消息管理</a>
-    <a href="/reports">日报管理</a>
-    <a href="/tasks">任务管理</a>
-    <a href="/notifications" class="active">通知中心</a>
+    <div class="sidebar-header">
+      <h2>🤖 AI 自动化</h2>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="/">
+        <span class="icon">📊</span>
+        <span>仪表盘</span>
+      </a>
+      <a href="/demo">
+        <span class="icon">🎯</span>
+        <span>演示中心</span>
+      </a>
+      <a href="/automations">
+        <span class="icon">⚙️</span>
+        <span>自动化规则</span>
+      </a>
+      <a href="/contracts">
+        <span class="icon">📄</span>
+        <span>合同管理</span>
+      </a>
+      <a href="/messages">
+        <span class="icon">💬</span>
+        <span>消息管理</span>
+      </a>
+      <a href="/reports">
+        <span class="icon">📈</span>
+        <span>日报管理</span>
+      </a>
+      <a href="/tasks">
+        <span class="icon">✅</span>
+        <span>任务管理</span>
+      </a>
+      <a href="/notifications" class="active">
+        <span class="icon">🔔</span>
+        <span>通知中心</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="/llm-config">
+        <span class="icon">🔧</span>
+        <span>LLM配置</span>
+      </a>
+    </div>
   </div>
   
   <div class="main-content">
-    <div class="header">
-      <h1>通知中心</h1>
-      <button class="btn btn-secondary" onclick="markAllRead()">全部标为已读</button>
+    <div class="page-header">
+      <div>
+        <h1>通知中心</h1>
+        <div class="subtitle">查看系统通知和提醒</div>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-secondary" onclick="markAllRead()">全部标为已读</button>
+      </div>
     </div>
     
-    <div class="section">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">通知列表</span>
+      </div>
       <% if ((notifications || []).length === 0) { %>
-        <div style="text-align:center; padding:40px; color:#a0aec0;">暂无通知</div>
+        <div style="text-align:center; padding:40px; color:var(--text-muted);">暂无通知</div>
       <% } else { %>
         <% (notifications || []).forEach(n => { %>
           <div class="notification-item <%= n.read ? '' : 'unread' %>">
-            <div class="notification-content">
-              <h4><%= n.message %></h4>
+            <div>
+              <div style="color:var(--text-primary); font-weight:500;"><%= n.message %></div>
               <div class="notification-time"><%= n.created_at %></div>
             </div>
-            <div>
-              <span class="badge <%= n.type === 'warning' ? 'warning' : n.type === 'success' ? 'success' : 'info' %>"><%= n.channel === 'wechat' ? '微信' : '系统' %></span>
+            <div style="display:flex; flex-direction:column; align-items:flex-end; gap:var(--spacing-sm);">
+              <% const typeMap = { 'warning': 'badge-warning', 'success': 'badge-success', 'info': 'badge-info' }; %>
+              <span class="badge <%= typeMap[n.type] || 'badge-info' %>"><%= n.channel === 'wechat' ? '微信' : '系统' %></span>
               <% if (!n.read) { %>
-                <button class="btn btn-primary" style="padding:5px 10px; font-size:12px; margin-top:10px;" onclick="markRead(<%= n.id %>)">标为已读</button>
+                <button class="btn btn-sm btn-primary" onclick="markRead(<%= n.id %>)">标为已读</button>
               <% } %>
             </div>
           </div>

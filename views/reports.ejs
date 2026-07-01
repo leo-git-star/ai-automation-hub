@@ -4,54 +4,68 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>日报管理</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f7fafc; }
-    .sidebar { width: 250px; background: white; height: 100vh; position: fixed; left: 0; top: 0; padding: 20px; box-shadow: 2px 0 10px rgba(0,0,0,0.05); }
-    .sidebar h2 { margin-bottom: 30px; color: #667eea; font-size: 20px; }
-    .sidebar a { display: block; padding: 12px 15px; margin-bottom: 8px; text-decoration: none; color: #4a5568; border-radius: 8px; transition: all 0.2s; }
-    .sidebar a:hover { background: #f0f0ff; color: #667eea; }
-    .sidebar a.active { background: #667eea; color: white; }
-    .main-content { margin-left: 250px; padding: 30px; }
-    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-    .header h1 { font-size: 28px; color: #1a202c; }
-    .btn { padding: 10px 20px; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; }
-    .btn-primary { background: #667eea; color: white; }
-    .btn-danger { background: #fc8181; color: white; }
-    .section { background: white; border-radius: 12px; padding: 25px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-    .section h3 { font-size: 18px; margin-bottom: 20px; color: #2d3748; }
-    .table { width: 100%; border-collapse: collapse; }
-    .table th, .table td { padding: 12px; text-align: left; border-bottom: 1px solid #e2e8f0; }
-    .table th { background: #f7fafc; font-weight: 600; color: #4a5568; }
-    .input-group { margin-bottom: 20px; }
-    .input-group textarea { width: 100%; padding: 15px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 16px; resize: vertical; min-height: 150px; }
-    .input-group textarea:focus { outline: none; border-color: #667eea; }
-    .summary-box { background: #f7fafc; border-radius: 10px; padding: 20px; margin-top: 15px; border-left: 4px solid #667eea; }
-    .report-card { background: #f7fafc; padding: 20px; border-radius: 10px; margin-bottom: 15px; }
-    .report-date { font-weight: 600; color: #667eea; margin-bottom: 10px; }
-  </style>
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   <div class="sidebar">
-    <h2>🤖 AI 自动化</h2>
-    <a href="/">仪表盘</a>
-    <a href="/demo">演示中心</a>
-    <a href="/automations">自动化规则</a>
-    <a href="/contracts">合同管理</a>
-    <a href="/messages">消息管理</a>
-    <a href="/reports" class="active">日报管理</a>
-    <a href="/tasks">任务管理</a>
-    <a href="/notifications">通知中心</a>
+    <div class="sidebar-header">
+      <h2>🤖 AI 自动化</h2>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="/">
+        <span class="icon">📊</span>
+        <span>仪表盘</span>
+      </a>
+      <a href="/demo">
+        <span class="icon">🎯</span>
+        <span>演示中心</span>
+      </a>
+      <a href="/automations">
+        <span class="icon">⚙️</span>
+        <span>自动化规则</span>
+      </a>
+      <a href="/contracts">
+        <span class="icon">📄</span>
+        <span>合同管理</span>
+      </a>
+      <a href="/messages">
+        <span class="icon">💬</span>
+        <span>消息管理</span>
+      </a>
+      <a href="/reports" class="active">
+        <span class="icon">📈</span>
+        <span>日报管理</span>
+      </a>
+      <a href="/tasks">
+        <span class="icon">✅</span>
+        <span>任务管理</span>
+      </a>
+      <a href="/notifications">
+        <span class="icon">🔔</span>
+        <span>通知中心</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="/llm-config">
+        <span class="icon">🔧</span>
+        <span>LLM配置</span>
+      </a>
+    </div>
   </div>
   
   <div class="main-content">
-    <div class="header">
-      <h1>日报管理</h1>
+    <div class="page-header">
+      <div>
+        <h1>日报管理</h1>
+        <div class="subtitle">管理日报提交和AI汇总分析</div>
+      </div>
     </div>
     
-    <div class="section">
-      <h3>📝 提交日报</h3>
-      <div class="input-group">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">📝 提交日报</span>
+      </div>
+      <div class="form-group">
         <textarea id="report-content" placeholder="今日完成工作：
 1. xxx
 2. xxx
@@ -59,22 +73,26 @@
 明日工作计划：
 1. xxx
 2. xxx"></textarea>
-        <button class="btn btn-primary" onclick="submitReport()">提交日报</button>
       </div>
+      <button class="btn btn-primary" onclick="submitReport()">提交日报</button>
     </div>
     
-    <div class="section">
-      <h3>📊 AI 汇总分析</h3>
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">📊 AI 汇总分析</span>
+      </div>
       <button class="btn btn-primary" onclick="summarizeReports()">汇总最近7天日报</button>
-      <div id="summary-result" class="summary-box" style="display:none;"></div>
+      <div id="summary-result" class="result-box" style="display:none;"></div>
     </div>
     
-    <div class="section">
-      <h3>📋 历史日报</h3>
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">📋 历史日报</span>
+      </div>
       <% (reports || []).forEach(r => { %>
-        <div class="report-card">
-          <div class="report-date">📅 <%= r.date %></div>
-          <pre style="white-space:pre-wrap; color:#4a5568;"><%= r.content %></pre>
+        <div style="background:var(--bg-input); padding:var(--spacing-md); border-radius:var(--border-radius); margin-bottom:var(--spacing-md);">
+          <div style="font-weight:600; color:var(--primary-light); margin-bottom:var(--spacing-sm);">📅 <%= r.date %></div>
+          <pre style="white-space:pre-wrap; color:var(--text-secondary); font-family:inherit;"><%= r.content %></pre>
         </div>
       <% }) %>
     </div>
@@ -99,7 +117,7 @@
     
     async function summarizeReports() {
       const resultBox = document.getElementById('summary-result');
-      resultBox.innerHTML = '<div style="text-align:center; color:#667eea;">AI 正在汇总分析...</div>';
+      resultBox.innerHTML = '<div class="loading"><div class="spinner"></div> AI 正在汇总分析...</div>';
       resultBox.style.display = 'block';
       
       try {
@@ -110,15 +128,18 @@
         const data = await res.json();
         
         if (data.success) {
+          resultBox.className = 'result-box success';
           resultBox.innerHTML = `
-            <h4 style="margin-bottom:10px;">✅ 汇总完成（基于 ${data.data.reportCount} 份日报）</h4>
-            <div>${data.data.summary.replace(/\n/g, '<br>')}</div>
+            <h4 style="margin-bottom:var(--spacing-sm);">✅ 汇总完成（基于 ${data.data.reportCount} 份日报）</h4>
+            <div style="color:var(--text-secondary);">${data.data.summary.replace(/\n/g, '<br>')}</div>
           `;
         } else {
-          resultBox.innerHTML = `<p style="color:#dc2626;">汇总失败：${data.error}</p>`;
+          resultBox.className = 'result-box error';
+          resultBox.innerHTML = `<p>汇总失败：${data.error}</p>`;
         }
       } catch (e) {
-        resultBox.innerHTML = `<p style="color:#dc2626;">请求失败：${e.message}</p>`;
+        resultBox.className = 'result-box error';
+        resultBox.innerHTML = `<p>请求失败：${e.message}</p>`;
       }
     }
   </script>

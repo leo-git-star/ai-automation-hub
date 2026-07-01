@@ -468,16 +468,9 @@ app.get('/api/llm/config', (req, res) => {
 app.post('/api/demo/classify', async (req, res) => {
   try {
     const { message } = req.body;
-    const result = await automation.executeRule({
-      user_id: 1,
-      action_type: 'run_ai',
-      action_config: JSON.stringify({
-        op: 'classify',
-        prompt: `请将以下客户咨询分类到以下类别之一：[报价咨询, 工期咨询, 材料咨询, 案例查看, 预约到店, 其他]。并提取关键信息：客户姓名（如有）、联系方式（如有）、咨询内容摘要。\n\n客户消息：${message}`
-      })
-    }, { content: message });
+    const classificationResult = await llm.classifyMessage(message);
     
-    res.json({ success: true, data: { classification: '报价咨询', confidence: '85%', summary: message.substring(0, 50) } });
+    res.json({ success: true, data: classificationResult });
   } catch (e) {
     res.json({ success: false, error: e.message });
   }

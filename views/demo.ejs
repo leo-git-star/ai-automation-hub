@@ -4,189 +4,188 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI 自动化工作流 - 演示中心</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
-    .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-    .header { text-align: center; color: white; margin-bottom: 40px; }
-    .header h1 { font-size: 36px; margin-bottom: 10px; }
-    .header p { font-size: 18px; opacity: 0.9; }
-    .cards { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; margin-bottom: 40px; }
-    .card { background: white; border-radius: 16px; padding: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); transition: transform 0.3s, box-shadow 0.3s; }
-    .card:hover { transform: translateY(-5px); box-shadow: 0 15px 50px rgba(0,0,0,0.2); }
-    .card-icon { width: 64px; height: 64px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 32px; margin-bottom: 20px; }
-    .card-icon.blue { background: #e6f4ff; }
-    .card-icon.green { background: #e6fffa; }
-    .card-icon.purple { background: #f3e8ff; }
-    .card h3 { font-size: 20px; margin-bottom: 15px; color: #1a202c; }
-    .card p { color: #718096; line-height: 1.6; margin-bottom: 20px; }
-    .btn { padding: 12px 24px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; transition: all 0.3s; }
-    .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
-    .btn-primary:hover { opacity: 0.9; transform: translateY(-2px); }
-    .btn-secondary { background: #f7fafc; color: #4a5568; border: 2px solid #e2e8f0; }
-    .btn-secondary:hover { background: #edf2f7; }
-    .demo-section { background: white; border-radius: 16px; padding: 30px; margin-bottom: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); }
-    .demo-section h2 { font-size: 24px; margin-bottom: 20px; color: #1a202c; }
-    .input-group { margin-bottom: 20px; }
-    .input-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #4a5568; }
-    .input-group textarea { width: 100%; padding: 15px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 16px; resize: vertical; min-height: 100px; font-family: inherit; }
-    .input-group textarea:focus { outline: none; border-color: #667eea; }
-    .result-box { background: #f7fafc; border-radius: 10px; padding: 20px; margin-top: 15px; display: none; }
-    .result-box.show { display: block; }
-    .result-box.success { border-left: 4px solid #48bb78; }
-    .result-box.error { border-left: 4px solid #fc8181; }
-    .result-box h4 { margin-bottom: 10px; color: #2d3748; }
-    .result-box p { color: #4a5568; line-height: 1.6; white-space: pre-wrap; }
-    .result-tag { display: inline-block; padding: 5px 12px; background: #667eea; color: white; border-radius: 20px; font-size: 14px; margin-right: 10px; margin-bottom: 10px; }
-    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 30px; }
-    .stat-card { background: white; border-radius: 12px; padding: 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-    .stat-card .number { font-size: 32px; font-weight: bold; color: #667eea; }
-    .stat-card .label { font-size: 14px; color: #718096; margin-top: 5px; }
-    .loading { text-align: center; padding: 20px; color: #667eea; font-size: 18px; }
-    .spinner { display: inline-block; width: 24px; height: 24px; border: 3px solid #e2e8f0; border-top-color: #667eea; border-radius: 50%; animation: spin 1s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .classification-badge { padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
-    .classification-badge.报价咨询 { background: #fef3c7; color: #d97706; }
-    .classification-badge.工期咨询 { background: #dbeafe; color: #2563eb; }
-    .classification-badge.材料咨询 { background: #dcfce7; color: #16a34a; }
-    .classification-badge.案例查看 { background: #fce7f3; color: #db2777; }
-    .classification-badge.预约到店 { background: #ede9fe; color: #7c3aed; }
-    .classification-badge.其他 { background: #f1f5f9; color: #64748b; }
-    .nav-bar { background: white; padding: 15px 30px; border-radius: 12px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-    .nav-bar a { text-decoration: none; color: #4a5568; margin-right: 24px; font-weight: 500; }
-    .nav-bar a:hover { color: #667eea; }
-    .nav-bar a.active { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 5px; }
-  </style>
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  <div class="container">
-    <div class="nav-bar">
-      <a href="/">管理面板</a>
-      <a href="/demo" class="active">演示中心</a>
-      <a href="/automations">自动化规则</a>
-      <a href="/contracts">合同管理</a>
-      <a href="/messages">消息管理</a>
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h2>🤖 AI 自动化</h2>
     </div>
-    
-    <div class="header">
-      <h1>🤖 AI 自动化工作流演示</h1>
-      <p>体验 AI 如何帮您自动处理重复工作</p>
+    <nav class="sidebar-nav">
+      <a href="/">
+        <span class="icon">📊</span>
+        <span>仪表盘</span>
+      </a>
+      <a href="/demo" class="active">
+        <span class="icon">🎯</span>
+        <span>演示中心</span>
+      </a>
+      <a href="/automations">
+        <span class="icon">⚙️</span>
+        <span>自动化规则</span>
+      </a>
+      <a href="/contracts">
+        <span class="icon">📄</span>
+        <span>合同管理</span>
+      </a>
+      <a href="/messages">
+        <span class="icon">💬</span>
+        <span>消息管理</span>
+      </a>
+      <a href="/reports">
+        <span class="icon">📈</span>
+        <span>日报管理</span>
+      </a>
+      <a href="/tasks">
+        <span class="icon">✅</span>
+        <span>任务管理</span>
+      </a>
+      <a href="/notifications">
+        <span class="icon">🔔</span>
+        <span>通知中心</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="/llm-config">
+        <span class="icon">🔧</span>
+        <span>LLM配置</span>
+      </a>
+    </div>
+  </div>
+  
+  <div class="main-content">
+    <div class="page-header">
+      <div>
+        <h1>AI 自动化工作流演示</h1>
+        <div class="subtitle">体验 AI 如何帮您自动处理重复工作</div>
+      </div>
     </div>
     
     <div class="stats-grid">
       <div class="stat-card">
-        <div class="number"><%= stats?.totalContracts || 3 %></div>
-        <div class="label">合同数量</div>
+        <div class="stat-icon">📝</div>
+        <div class="stat-number"><%= stats?.totalContracts || 3 %></div>
+        <div class="stat-label">合同数量</div>
       </div>
       <div class="stat-card">
-        <div class="number"><%= stats?.expiringContracts || 3 %></div>
-        <div class="label">即将到期</div>
+        <div class="stat-icon">⚠️</div>
+        <div class="stat-number"><%= stats?.expiringContracts || 3 %></div>
+        <div class="stat-label">即将到期</div>
       </div>
       <div class="stat-card">
-        <div class="number"><%= stats?.recentMessages || 3 %></div>
-        <div class="label">客户咨询</div>
+        <div class="stat-icon">💬</div>
+        <div class="stat-number"><%= stats?.recentMessages || 3 %></div>
+        <div class="stat-label">客户咨询</div>
       </div>
       <div class="stat-card">
-        <div class="number"><%= stats?.activeAutomations || 3 %></div>
-        <div class="label">运行中规则</div>
+        <div class="stat-icon">⚙️</div>
+        <div class="stat-number"><%= stats?.activeAutomations || 3 %></div>
+        <div class="stat-label">运行中规则</div>
       </div>
     </div>
     
-    <div class="cards">
-      <div class="card">
-        <div class="card-icon blue">📝</div>
-        <h3>客户咨询自动分类</h3>
-        <p>AI 自动识别客户消息意图，分类标签，自动回复常见问题，创建跟进任务。</p>
-        <button class="btn btn-primary" onclick="showDemo('classify')">开始演示</button>
+    <div class="grid-3">
+      <div class="card" onclick="showDemo('classify')" style="cursor:pointer;">
+        <div style="width:64px; height:64px; border-radius:var(--border-radius-lg); display:flex; align-items:center; justify-content:center; font-size:32px; margin-bottom:var(--spacing-lg); background:linear-gradient(135deg, rgba(99,102,241,0.2), rgba(59,130,246,0.2));">📝</div>
+        <h3 style="font-size:var(--font-size-lg); font-weight:600; margin-bottom:var(--spacing-md); color:var(--text-primary);">客户咨询自动分类</h3>
+        <p style="color:var(--text-secondary); line-height:1.6; margin-bottom:var(--spacing-lg);">AI 自动识别客户消息意图，分类标签，自动回复常见问题，创建跟进任务。</p>
+        <button class="btn btn-primary" onclick="event.stopPropagation(); showDemo('classify')">开始演示</button>
       </div>
-      <div class="card">
-        <div class="card-icon green">📅</div>
-        <h3>合同到期自动提醒</h3>
-        <p>自动检测即将到期的合同，提前发送提醒通知，创建跟进任务，确保合同续签。</p>
-        <button class="btn btn-primary" onclick="showDemo('due')">开始演示</button>
+      <div class="card" onclick="showDemo('due')" style="cursor:pointer;">
+        <div style="width:64px; height:64px; border-radius:var(--border-radius-lg); display:flex; align-items:center; justify-content:center; font-size:32px; margin-bottom:var(--spacing-lg); background:linear-gradient(135deg, rgba(16,185,129,0.2), rgba(6,182,212,0.2));">📅</div>
+        <h3 style="font-size:var(--font-size-lg); font-weight:600; margin-bottom:var(--spacing-md); color:var(--text-primary);">合同到期自动提醒</h3>
+        <p style="color:var(--text-secondary); line-height:1.6; margin-bottom:var(--spacing-lg);">自动检测即将到期的合同，提前发送提醒通知，创建跟进任务，确保合同续签。</p>
+        <button class="btn btn-primary" onclick="event.stopPropagation(); showDemo('due')">开始演示</button>
       </div>
-      <div class="card">
-        <div class="card-icon purple">📊</div>
-        <h3>日报周报自动汇总</h3>
-        <p>自动收集员工日报，AI 智能汇总分析，生成日报摘要和周报报表，节省80%时间。</p>
-        <button class="btn btn-primary" onclick="showDemo('summarize')">开始演示</button>
+      <div class="card" onclick="showDemo('summarize')" style="cursor:pointer;">
+        <div style="width:64px; height:64px; border-radius:var(--border-radius-lg); display:flex; align-items:center; justify-content:center; font-size:32px; margin-bottom:var(--spacing-lg); background:linear-gradient(135deg, rgba(139,92,246,0.2), rgba(236,72,153,0.2));">📊</div>
+        <h3 style="font-size:var(--font-size-lg); font-weight:600; margin-bottom:var(--spacing-md); color:var(--text-primary);">日报周报自动汇总</h3>
+        <p style="color:var(--text-secondary); line-height:1.6; margin-bottom:var(--spacing-lg);">自动收集员工日报，AI 智能汇总分析，生成日报摘要和周报报表，节省80%时间。</p>
+        <button class="btn btn-primary" onclick="event.stopPropagation(); showDemo('summarize')">开始演示</button>
       </div>
     </div>
     
-    <div id="demo-classify" class="demo-section" style="display:none;">
-      <h2>📝 客户咨询自动分类</h2>
-      <div class="input-group">
+    <div id="demo-classify" class="card" style="display:none;">
+      <div class="card-header">
+        <span class="card-title">📝 客户咨询自动分类</span>
+      </div>
+      <div class="form-group">
         <label>输入客户咨询消息：</label>
         <textarea id="classify-input" placeholder="例如：您好，我想了解一下100平房子的装修报价..."></textarea>
       </div>
       <button class="btn btn-primary" onclick="runClassifyDemo()">开始分类</button>
-      <div id="classify-result" class="result-box"></div>
+      <div id="classify-result" class="result-box" style="display:none;"></div>
       
-      <div style="margin-top:30px;">
-        <h4>历史消息记录：</h4>
-        <div style="display:flex; flex-wrap:gap:10px; margin-top:15px;">
+      <div style="margin-top:var(--spacing-xl);">
+        <h4 style="font-size:var(--font-size-base); font-weight:600; margin-bottom:var(--spacing-md); color:var(--text-primary);">历史消息记录：</h4>
+        <div style="display:flex; flex-wrap:wrap; gap:var(--spacing-md);">
           <% (recentMessages || []).slice(0, 5).forEach(msg => { %>
-            <div style="background:#f7fafc; padding:15px; border-radius:10px; margin-right:15px; margin-bottom:10px; min-width:200px;">
-              <div style="font-size:14px; color:#4a5568; margin-bottom:8px;"><%= msg.content %></div>
-              <div class="classification-badge <%= msg.classification %>"><%= msg.classification %></div>
+            <div class="card" style="min-width:250px; padding:var(--spacing-md);">
+              <div class="text-sm text-secondary" style="margin-bottom:var(--spacing-sm);"><%= msg.content %></div>
+              <% const classMap = { '报价咨询': 'badge-warning', '工期咨询': 'badge-info', '材料咨询': 'badge-success', '案例查看': 'badge-purple', '预约到店': 'badge-primary', '其他': 'badge-info' }; %>
+              <span class="badge <%= classMap[msg.classification] || 'badge-info' %>"><%= msg.classification %></span>
             </div>
           <% }) %>
         </div>
       </div>
     </div>
     
-    <div id="demo-due" class="demo-section" style="display:none;">
-      <h2>📅 合同到期自动提醒</h2>
-      <div style="background:#fef3c7; padding:15px; border-radius:10px; margin-bottom:20px;">
-        <p><strong>⚠️ 演示说明：</strong>系统会检测未来30天内到期的合同，并自动发送提醒通知。</p>
+    <div id="demo-due" class="card" style="display:none;">
+      <div class="card-header">
+        <span class="card-title">📅 合同到期自动提醒</span>
+      </div>
+      <div class="result-box warning" style="margin-bottom:var(--spacing-lg);">
+        <p style="font-weight:500;">⚠️ 演示说明：系统会检测未来30天内到期的合同，并自动发送提醒通知。</p>
       </div>
       <button class="btn btn-primary" onclick="runDueDemo()">检测到期合同</button>
-      <div id="due-result" class="result-box"></div>
+      <div id="due-result" class="result-box" style="display:none;"></div>
       
-      <div style="margin-top:30px;">
-        <h4>即将到期的合同：</h4>
-        <table style="width:100%; border-collapse:collapse; margin-top:15px;">
-          <thead>
-            <tr style="background:#f7fafc;">
-              <th style="padding:12px; text-align:left; border-bottom:2px solid #e2e8f0;">客户名称</th>
-              <th style="padding:12px; text-align:left; border-bottom:2px solid #e2e8f0;">合同编号</th>
-              <th style="padding:12px; text-align:left; border-bottom:2px solid #e2e8f0;">到期日期</th>
-              <th style="padding:12px; text-align:left; border-bottom:2px solid #e2e8f0;">剩余天数</th>
-              <th style="padding:12px; text-align:left; border-bottom:2px solid #e2e8f0;">金额</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% (expiringContracts || []).forEach(c => { %>
+      <div style="margin-top:var(--spacing-xl);">
+        <h4 style="font-size:var(--font-size-base); font-weight:600; margin-bottom:var(--spacing-md); color:var(--text-primary);">即将到期的合同：</h4>
+        <div class="table-container">
+          <table class="table">
+            <thead>
               <tr>
-                <td style="padding:12px; border-bottom:1px solid #e2e8f0;"><%= c.customer_name %></td>
-                <td style="padding:12px; border-bottom:1px solid #e2e8f0;"><%= c.contract_no %></td>
-                <td style="padding:12px; border-bottom:1px solid #e2e8f0;"><%= c.end_date %></td>
-                <td style="padding:12px; border-bottom:1px solid #e2e8f0;">
-                  <span style="color:<%= (c.daysLeft || 0) <= 7 ? '#dc2626' : '#d97706' %>; font-weight:bold;">
-                    <%= (c.daysLeft || 0) %>天
-                  </span>
-                </td>
-                <td style="padding:12px; border-bottom:1px solid #e2e8f0;">¥<%= c.amount.toLocaleString() %></td>
+                <th>客户名称</th>
+                <th>合同编号</th>
+                <th>到期日期</th>
+                <th>剩余天数</th>
+                <th>金额</th>
               </tr>
-            <% }) %>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              <% (expiringContracts || []).forEach(c => { %>
+                <tr>
+                  <td><%= c.customer_name %></td>
+                  <td><%= c.contract_no %></td>
+                  <td><%= c.end_date %></td>
+                  <td class="<%= (c.daysLeft || 0) <= 7 ? 'due-7' : 'due-30' %>">
+                    <%= (c.daysLeft || 0) %>天
+                  </td>
+                  <td>¥<%= c.amount.toLocaleString() %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
     
-    <div id="demo-summarize" class="demo-section" style="display:none;">
-      <h2>📊 日报周报自动汇总</h2>
-      <div style="background:#e6f4ff; padding:15px; border-radius:10px; margin-bottom:20px;">
-        <p><strong>💡 演示说明：</strong>AI 会自动汇总最近7天的日报内容，生成结构化报告。</p>
+    <div id="demo-summarize" class="card" style="display:none;">
+      <div class="card-header">
+        <span class="card-title">📊 日报周报自动汇总</span>
+      </div>
+      <div class="result-box" style="margin-bottom:var(--spacing-lg); border-left-color:var(--info);">
+        <p style="font-weight:500;">💡 演示说明：AI 会自动汇总最近7天的日报内容，生成结构化报告。</p>
       </div>
       <button class="btn btn-primary" onclick="runSummarizeDemo()">汇总日报</button>
-      <div id="summarize-result" class="result-box"></div>
+      <div id="summarize-result" class="result-box" style="display:none;"></div>
     </div>
   </div>
 
   <script>
     function showDemo(type) {
-      document.querySelectorAll('.demo-section').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('.card').forEach(el => { if(el.id && el.id.startsWith('demo-')) el.style.display = 'none'; });
       document.getElementById(`demo-${type}`).style.display = 'block';
     }
     
@@ -199,7 +198,7 @@
       
       const resultBox = document.getElementById('classify-result');
       resultBox.innerHTML = '<div class="loading"><div class="spinner"></div> AI 正在分析...</div>';
-      resultBox.classList.add('show', 'success');
+      resultBox.style.display = 'block';
       
       try {
         const res = await fetch('/api/demo/classify', {
@@ -210,30 +209,29 @@
         const data = await res.json();
         
         if (data.success) {
+          resultBox.className = 'result-box success';
           resultBox.innerHTML = `
-            <h4>✅ 分类完成</h4>
-            <div style="margin-bottom:10px;">
-              <span class="result-tag">分类：${data.data.classification}</span>
-              <span class="result-tag">置信度：${data.data.confidence}</span>
+            <h4 style="font-size:var(--font-size-base); margin-bottom:var(--spacing-md);">✅ 分类完成</h4>
+            <div style="margin-bottom:var(--spacing-md);">
+              <span class="badge badge-primary">分类：${data.data.classification}</span>
+              <span class="badge badge-success">置信度：${data.data.confidence}</span>
             </div>
-            <p><strong>摘要：</strong>${data.data.summary || data.data.content}</p>
+            <p style="color:var(--text-secondary);"><strong>摘要：</strong>${data.data.summary || data.data.content}</p>
           `;
         } else {
+          resultBox.className = 'result-box error';
           resultBox.innerHTML = `<h4>❌ 分类失败</h4><p>${data.error}</p>`;
-          resultBox.classList.remove('success');
-          resultBox.classList.add('error');
         }
       } catch (e) {
+        resultBox.className = 'result-box error';
         resultBox.innerHTML = `<h4>❌ 请求失败</h4><p>${e.message}</p>`;
-        resultBox.classList.remove('success');
-        resultBox.classList.add('error');
       }
     }
     
     async function runDueDemo() {
       const resultBox = document.getElementById('due-result');
       resultBox.innerHTML = '<div class="loading"><div class="spinner"></div> 正在检测到期合同...</div>';
-      resultBox.classList.add('show', 'success');
+      resultBox.style.display = 'block';
       
       try {
         const res = await fetch('/api/demo/check-due', {
@@ -243,6 +241,7 @@
         const data = await res.json();
         
         if (data.success) {
+          resultBox.className = 'result-box success';
           const executed = data.data.executed || [];
           if (executed.length > 0) {
             let html = `<h4>✅ 检测完成</h4><p>检测到 ${executed.length} 个到期合同，已自动触发提醒。</p><ul>`;
@@ -255,21 +254,19 @@
             resultBox.innerHTML = `<h4>✅ 检测完成</h4><p>当前没有需要提醒的到期合同。</p>`;
           }
         } else {
+          resultBox.className = 'result-box error';
           resultBox.innerHTML = `<h4>❌ 检测失败</h4><p>${data.error}</p>`;
-          resultBox.classList.remove('success');
-          resultBox.classList.add('error');
         }
       } catch (e) {
+        resultBox.className = 'result-box error';
         resultBox.innerHTML = `<h4>❌ 请求失败</h4><p>${e.message}</p>`;
-        resultBox.classList.remove('success');
-        resultBox.classList.add('error');
       }
     }
     
     async function runSummarizeDemo() {
       const resultBox = document.getElementById('summarize-result');
       resultBox.innerHTML = '<div class="loading"><div class="spinner"></div> AI 正在汇总分析...</div>';
-      resultBox.classList.add('show', 'success');
+      resultBox.style.display = 'block';
       
       try {
         const res = await fetch('/api/demo/summarize', {
@@ -279,22 +276,21 @@
         const data = await res.json();
         
         if (data.success) {
+          resultBox.className = 'result-box success';
           resultBox.innerHTML = `
             <h4>✅ 汇总完成</h4>
-            <p><strong>汇总报告（基于 ${data.data.reportCount} 份日报）：</strong></p>
-            <div style="margin-top:15px; padding:15px; background:white; border-radius:8px; border-left:4px solid #667eea;">
+            <p style="color:var(--text-secondary);"><strong>汇总报告（基于 ${data.data.reportCount} 份日报）：</strong></p>
+            <div style="margin-top:var(--spacing-md); padding:var(--spacing-md); background:var(--bg-input); border-radius:var(--border-radius); border-left:4px solid var(--primary);">
               ${data.data.summary.replace(/\n/g, '<br>')}
             </div>
           `;
         } else {
+          resultBox.className = 'result-box error';
           resultBox.innerHTML = `<h4>❌ 汇总失败</h4><p>${data.error}</p>`;
-          resultBox.classList.remove('success');
-          resultBox.classList.add('error');
         }
       } catch (e) {
+        resultBox.className = 'result-box error';
         resultBox.innerHTML = `<h4>❌ 请求失败</h4><p>${e.message}</p>`;
-        resultBox.classList.remove('success');
-        resultBox.classList.add('error');
       }
     }
     
