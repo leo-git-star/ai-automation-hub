@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LLM配置 - AI Automation Hub</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f7fa; color: #333; }
+    .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px 40px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    .header h1 { font-size: 24px; font-weight: 600; }
+    .nav { margin-top: 10px; }
+    .nav a { color: rgba(255,255,255,0.8); text-decoration: none; margin-right: 20px; font-size: 14px; transition: color 0.3s; }
+    .nav a:hover, .nav a.active { color: white; font-weight: 500; }
+    .container { max-width: 900px; margin: 30px auto; padding: 0 20px; }
+    .card { background: white; border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .card h2 { font-size: 18px; margin-bottom: 20px; color: #2d3748; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-size: 14px; font-weight: 500; margin-bottom: 8px; color: #4a5568; }
+    .form-group select, .form-group input { width: 100%; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 14px; transition: border-color 0.3s; background: white; }
+    .form-group select:focus, .form-group input:focus { outline: none; border-color: #667eea; }
+    .form-group .hint { font-size: 12px; color: #718096; margin-top: 6px; }
+    .btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 12px 32px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(102,126,234,0.4); }
+    .btn:active { transform: translateY(0); }
+    .btn-secondary { background: #e2e8f0; color: #4a5568; }
+    .btn-secondary:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .model-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+    .model-item { border: 2px solid #e2e8f0; border-radius: 8px; padding: 16px; cursor: pointer; transition: all 0.3s; }
+    .model-item:hover { border-color: #667eea; background: #f7fafc; }
+    .model-item.selected { border-color: #667eea; background: #f0f4ff; }
+    .model-item .name { font-weight: 600; color: #2d3748; }
+    .model-item .note { font-size: 12px; color: #718096; margin-top: 4px; }
+    .platform-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+    .platform-tab { padding: 8px 16px; border: 2px solid #e2e8f0; border-radius: 8px; background: white; cursor: pointer; font-size: 14px; transition: all 0.3s; }
+    .platform-tab:hover { border-color: #667eea; }
+    .platform-tab.active { background: #667eea; color: white; border-color: #667eea; }
+    .status { padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 14px; }
+    .status.success { background: #d4edda; color: #155724; }
+    .status.warning { background: #fff3cd; color: #856404; }
+    .status.error { background: #f8d7da; color: #721c24; }
+    .api-key-tip { background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px; margin-top: 8px; border-radius: 0 8px 8px 0; font-size: 12px; }
+    .test-section { margin-top: 24px; padding-top: 20px; border-top: 2px dashed #e2e8f0; }
+    .test-result { margin-top: 12px; padding: 12px; border-radius: 8px; font-family: monospace; font-size: 13px; }
+    .loading { display: inline-block; width: 20px; height: 20px; border: 2px solid #fff; border-radius: 50%; border-top-color: transparent; animation: spin 0.6s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>AI Automation Hub</h1>
+    <div class="nav">
+      <a href="/">仪表盘</a>
+      <a href="/demo">演示页面</a>
+      <a href="/automations">自动化规则</a>
+      <a href="/llm-config" class="active">LLM配置</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="card">
+      <h2>🤖 LLM模型配置</h2>
+      
+      <% if (config.enabled && config.key) { %>
+        <div class="status success">✓ 已配置API Key，将使用真实AI模型进行处理</div>
+      <% } else { %>
+        <div class="status warning">⚠️ 未配置API Key，当前使用模拟AI响应</div>
+      <% } %>
+
+      <form id="configForm">
+        <div class="form-group">
+          <label>选择平台</label>
+          <div class="platform-tabs">
+            <% Object.keys(models.platform_meta).forEach(platform => { %>
+              <button type="button" class="platform-tab <%= config.platform === platform ? 'active' : '' %>" data-platform="<%= platform %>">
+                <%= models.platform_meta[platform].label %>
+              </button>
+            <% }) %>
+          </div>
+          <input type="hidden" id="platform" name="platform" value="<%= config.platform %>">
+        </div>
+
+        <div class="form-group">
+          <label>选择模型</label>
+          <div class="model-list" id="modelList">
+            <% Object.keys(models.platforms).forEach(platform => { %>
+              <% models.platforms[platform].forEach(model => { %>
+                <div class="model-item <%= config.platform === platform && config.model === model.id ? 'selected' : '' %>" 
+                     data-platform="<%= platform %>" data-model="<%= model.id %>">
+                  <div class="name"><%= model.name %></div>
+                  <div class="note"><%= model.note %></div>
+                </div>
+              <% }) %>
+            <% }) %>
+          </div>
+          <input type="hidden" id="model" name="model" value="<%= config.model %>">
+        </div>
+
+        <div class="form-group">
+          <label>API Key</label>
+          <input type="password" id="api_key" name="api_key" placeholder="输入您的API Key" value="<%= config.key ? '****************' : '' %>">
+          <div class="api-key-tip">
+            💡 获取免费API Key：
+            <ul style="margin-top: 4px; padding-left: 16px;">
+              <li>智谱AI: <a href="https://open.bigmodel.cn/" target="_blank">https://open.bigmodel.cn/</a></li>
+              <li>硅基流动: <a href="https://www.siliconflow.cn/" target="_blank">https://www.siliconflow.cn/</a></li>
+              <li>Google Gemini: <a href="https://ai.google.dev/" target="_blank">https://ai.google.dev/</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <button type="submit" class="btn">保存配置</button>
+      </form>
+
+      <div class="test-section">
+        <h3 style="font-size: 16px; margin-bottom: 12px;">测试连接</h3>
+        <button class="btn btn-secondary" id="testBtn">测试AI模型</button>
+        <div id="testResult"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const platformTabs = document.querySelectorAll('.platform-tab');
+    const modelItems = document.querySelectorAll('.model-item');
+    const platformInput = document.getElementById('platform');
+    const modelInput = document.getElementById('model');
+
+    platformTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        platformTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        platformInput.value = tab.dataset.platform;
+        
+        modelItems.forEach(item => {
+          if (item.dataset.platform === tab.dataset.platform) {
+            item.style.display = 'block';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    modelItems.forEach(item => {
+      item.addEventListener('click', () => {
+        modelItems.forEach(i => i.classList.remove('selected'));
+        item.classList.add('selected');
+        platformInput.value = item.dataset.platform;
+        modelInput.value = item.dataset.model;
+        
+        platformTabs.forEach(tab => {
+          tab.classList.remove('active');
+          if (tab.dataset.platform === item.dataset.platform) {
+            tab.classList.add('active');
+          }
+        });
+      });
+    });
+
+    document.getElementById('configForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData);
+      
+      const response = await fetch('/api/llm/config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      
+      const result = await response.json();
+      if (result.success) {
+        alert('配置保存成功！');
+        location.reload();
+      } else {
+        alert('保存失败：' + result.error);
+      }
+    });
+
+    document.getElementById('testBtn').addEventListener('click', async () => {
+      const btn = document.getElementById('testBtn');
+      const resultDiv = document.getElementById('testResult');
+      
+      btn.disabled = true;
+      btn.innerHTML = '<span class="loading"></span> 测试中...';
+      resultDiv.innerHTML = '';
+
+      try {
+        const response = await fetch('/api/demo/classify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: '测试消息：您好，我想了解装修报价' })
+        });
+        
+        const result = await response.json();
+        if (result.success) {
+          resultDiv.className = 'test-result';
+          resultDiv.style.background = '#d4edda';
+          resultDiv.style.color = '#155724';
+          resultDiv.innerHTML = `✓ 测试成功！<br>分类结果：${result.data.classification}<br>置信度：${result.data.confidence}`;
+        } else {
+          resultDiv.className = 'test-result';
+          resultDiv.style.background = '#f8d7da';
+          resultDiv.style.color = '#721c24';
+          resultDiv.innerHTML = '✗ 测试失败：' + result.error;
+        }
+      } catch (error) {
+        resultDiv.className = 'test-result';
+        resultDiv.style.background = '#f8d7da';
+        resultDiv.style.color = '#721c24';
+        resultDiv.innerHTML = '✗ 测试失败：' + error.message;
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '测试AI模型';
+      }
+    });
+
+    document.querySelectorAll('.model-item').forEach(item => {
+      if (item.dataset.platform !== platformInput.value) {
+        item.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>

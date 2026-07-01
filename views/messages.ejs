@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>消息管理</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f7fafc; }
+    .sidebar { width: 250px; background: white; height: 100vh; position: fixed; left: 0; top: 0; padding: 20px; box-shadow: 2px 0 10px rgba(0,0,0,0.05); }
+    .sidebar h2 { margin-bottom: 30px; color: #667eea; font-size: 20px; }
+    .sidebar a { display: block; padding: 12px 15px; margin-bottom: 8px; text-decoration: none; color: #4a5568; border-radius: 8px; transition: all 0.2s; }
+    .sidebar a:hover { background: #f0f0ff; color: #667eea; }
+    .sidebar a.active { background: #667eea; color: white; }
+    .main-content { margin-left: 250px; padding: 30px; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+    .header h1 { font-size: 28px; color: #1a202c; }
+    .btn { padding: 10px 20px; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; }
+    .btn-primary { background: #667eea; color: white; }
+    .btn-danger { background: #fc8181; color: white; }
+    .section { background: white; border-radius: 12px; padding: 25px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+    .table { width: 100%; border-collapse: collapse; }
+    .table th, .table td { padding: 12px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+    .table th { background: #f7fafc; font-weight: 600; color: #4a5568; }
+    .badge { padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+    .badge.报价咨询 { background: #fef3c7; color: #d97706; }
+    .badge.工期咨询 { background: #dbeafe; color: #2563eb; }
+    .badge.材料咨询 { background: #dcfce7; color: #16a34a; }
+    .badge.案例查看 { background: #fce7f3; color: #db2777; }
+    .badge.预约到店 { background: #ede9fe; color: #7c3aed; }
+    .badge.其他 { background: #f1f5f9; color: #64748b; }
+    .input-group { margin-bottom: 20px; }
+    .input-group textarea { width: 100%; padding: 15px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 16px; resize: vertical; min-height: 100px; }
+    .input-group textarea:focus { outline: none; border-color: #667eea; }
+    .result-box { background: #f7fafc; border-radius: 10px; padding: 20px; margin-top: 15px; }
+    .result-tag { display: inline-block; padding: 5px 12px; background: #667eea; color: white; border-radius: 20px; font-size: 14px; margin-right: 10px; }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>🤖 AI 自动化</h2>
+    <a href="/">仪表盘</a>
+    <a href="/demo">演示中心</a>
+    <a href="/automations">自动化规则</a>
+    <a href="/contracts">合同管理</a>
+    <a href="/messages" class="active">消息管理</a>
+    <a href="/reports">日报管理</a>
+    <a href="/tasks">任务管理</a>
+    <a href="/notifications">通知中心</a>
+  </div>
+  
+  <div class="main-content">
+    <div class="header">
+      <h1>消息管理</h1>
+    </div>
+    
+    <div class="section">
+      <h3>📝 AI 智能分类</h3>
+      <div class="input-group">
+        <textarea id="message-input" placeholder="输入客户咨询消息，AI将自动分类..."></textarea>
+        <button class="btn btn-primary" onclick="classifyMessage()">开始分类</button>
+      </div>
+      <div id="classification-result" class="result-box" style="display:none;"></div>
+    </div>
+    
+    <div class="section">
+      <h3>💬 历史消息记录</h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>内容</th>
+            <th>分类</th>
+            <th>客户名称</th>
+            <th>联系方式</th>
+            <th>状态</th>
+            <th>时间</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% (messages || []).forEach(m => { %>
+            <tr>
+              <td style="max-width:400px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"><%= m.content %></td>
+              <td><span class="badge <%= m.classification %>"><%= m.classification %></span></td>
+              <td><%= m.customer_name || '-' %></td>
+              <td><%= m.customer_phone || '-' %></td>
+              <td><span class="badge <%= m.status === 'pending' ? 'warning' : 'success' %>"><%= m.status === 'pending' ? '待处理' : '已处理' %></span></td>
+              <td><%= m.created_at %></td>
+              <td>
+                <button class="btn btn-danger" style="padding:5px 10px; font-size:12px;" onclick="deleteMessage(<%= m.id %>)">删除</button>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    async function classifyMessage() {
+      const input = document.getElementById('message-input').value;
+      if (!input.trim()) { alert('请输入消息内容'); return; }
+      
+      const resultBox = document.getElementById('classification-result');
+      resultBox.innerHTML = '<div style="text-align:center; color:#667eea;">AI 正在分析...</div>';
+      resultBox.style.display = 'block';
+      
+      try {
+        const res = await fetch('/api/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ content: input })
+        });
+        const data = await res.json();
+        
+        if (data.success) {
+          resultBox.innerHTML = `
+            <div>
+              <span class="result-tag">分类：${data.data.classification}</span>
+              <span class="result-tag">置信度：${data.data.confidence}</span>
+            </div>
+            <p style="margin-top:10px;"><strong>摘要：</strong>${data.data.summary || input}</p>
+          `;
+          document.getElementById('message-input').value = '';
+        } else {
+          resultBox.innerHTML = `<p style="color:#dc2626;">分类失败：${data.error}</p>`;
+        }
+      } catch (e) {
+        resultBox.innerHTML = `<p style="color:#dc2626;">请求失败：${e.message}</p>`;
+      }
+    }
+    
+    async function deleteMessage(id) {
+      if (!confirm('确定删除此消息？')) return;
+      await fetch(`/api/messages/${id}`, { method: 'DELETE' });
+      location.reload();
+    }
+  </script>
+</body>
+</html>

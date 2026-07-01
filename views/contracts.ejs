@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>合同管理</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f7fafc; }
+    .sidebar { width: 250px; background: white; height: 100vh; position: fixed; left: 0; top: 0; padding: 20px; box-shadow: 2px 0 10px rgba(0,0,0,0.05); }
+    .sidebar h2 { margin-bottom: 30px; color: #667eea; font-size: 20px; }
+    .sidebar a { display: block; padding: 12px 15px; margin-bottom: 8px; text-decoration: none; color: #4a5568; border-radius: 8px; transition: all 0.2s; }
+    .sidebar a:hover { background: #f0f0ff; color: #667eea; }
+    .sidebar a.active { background: #667eea; color: white; }
+    .main-content { margin-left: 250px; padding: 30px; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+    .header h1 { font-size: 28px; color: #1a202c; }
+    .btn { padding: 10px 20px; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; }
+    .btn-primary { background: #667eea; color: white; }
+    .btn-primary:hover { background: #5a6fd6; }
+    .btn-secondary { background: #f7fafc; color: #4a5568; border: 1px solid #e2e8f0; }
+    .btn-danger { background: #fc8181; color: white; }
+    .section { background: white; border-radius: 12px; padding: 25px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+    .table { width: 100%; border-collapse: collapse; }
+    .table th, .table td { padding: 12px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+    .table th { background: #f7fafc; font-weight: 600; color: #4a5568; }
+    .badge { padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+    .badge.success { background: #dcfce7; color: #16a34a; }
+    .badge.danger { background: #fee2e2; color: #dc2626; }
+    .badge.warning { background: #fef3c7; color: #d97706; }
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; }
+    .modal.show { display: flex; }
+    .modal-content { background: white; border-radius: 12px; padding: 30px; width: 500px; max-width: 90%; }
+    .input-group { margin-bottom: 15px; }
+    .input-group label { display: block; margin-bottom: 5px; font-weight: 600; }
+    .input-group input { width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px; }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+    .due-7 { color: #dc2626; font-weight: bold; }
+    .due-30 { color: #d97706; }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>🤖 AI 自动化</h2>
+    <a href="/">仪表盘</a>
+    <a href="/demo">演示中心</a>
+    <a href="/automations">自动化规则</a>
+    <a href="/contracts" class="active">合同管理</a>
+    <a href="/messages">消息管理</a>
+    <a href="/reports">日报管理</a>
+    <a href="/tasks">任务管理</a>
+    <a href="/notifications">通知中心</a>
+  </div>
+  
+  <div class="main-content">
+    <div class="header">
+      <h1>合同管理</h1>
+      <button class="btn btn-primary" onclick="openModal()">+ 新建合同</button>
+    </div>
+    
+    <div class="section">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>客户名称</th>
+            <th>联系方式</th>
+            <th>合同编号</th>
+            <th>金额</th>
+            <th>开始日期</th>
+            <th>到期日期</th>
+            <th>剩余天数</th>
+            <th>状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% (contracts || []).forEach(c => { %>
+            <tr>
+              <td><%= c.customer_name %></td>
+              <td><%= c.customer_phone || '-' %></td>
+              <td><%= c.contract_no %></td>
+              <td>¥<%= c.amount.toLocaleString() %></td>
+              <td><%= c.start_date || '-' %></td>
+              <td><%= c.end_date %></td>
+              <td class="<%= (c.daysLeft || 0) <= 7 ? 'due-7' : (c.daysLeft || 0) <= 30 ? 'due-30' : '' %>">
+                <%= (c.daysLeft || 0) > 0 ? c.daysLeft + '天' : '已到期' %>
+              </td>
+              <td><span class="badge <%= c.status === 'active' ? 'success' : 'danger' %>"><%= c.status === 'active' ? '有效' : '已终止' %></span></td>
+              <td>
+                <button class="btn btn-danger" style="padding:5px 10px; font-size:12px;" onclick="deleteContract(<%= c.id %>)">删除</button>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <h3>新建合同</h3>
+      <div class="input-group">
+        <label>客户名称 *</label>
+        <input type="text" id="customer_name" placeholder="请输入客户名称">
+      </div>
+      <div class="input-group">
+        <label>联系方式</label>
+        <input type="text" id="customer_phone" placeholder="请输入联系电话">
+      </div>
+      <div class="input-group">
+        <label>合同编号 *</label>
+        <input type="text" id="contract_no" placeholder="请输入合同编号">
+      </div>
+      <div class="input-group">
+        <label>合同金额</label>
+        <input type="number" id="amount" placeholder="0.00">
+      </div>
+      <div class="input-group">
+        <label>开始日期</label>
+        <input type="date" id="start_date">
+      </div>
+      <div class="input-group">
+        <label>到期日期 *</label>
+        <input type="date" id="end_date">
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closeModal()">取消</button>
+        <button class="btn btn-primary" onclick="saveContract()">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openModal() { document.getElementById('modal').classList.add('show'); }
+    function closeModal() { document.getElementById('modal').classList.remove('show'); }
+    
+    async function saveContract() {
+      const customer_name = document.getElementById('customer_name').value;
+      const customer_phone = document.getElementById('customer_phone').value;
+      const contract_no = document.getElementById('contract_no').value;
+      const amount = document.getElementById('amount').value;
+      const start_date = document.getElementById('start_date').value;
+      const end_date = document.getElementById('end_date').value;
+      
+      if (!customer_name || !contract_no || !end_date) { alert('请填写必填字段'); return; }
+      
+      try {
+        await fetch('/api/contracts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ customer_name, customer_phone, contract_no, amount, start_date, end_date })
+        });
+        location.reload();
+      } catch (e) { alert('保存失败'); }
+    }
+    
+    async function deleteContract(id) {
+      if (!confirm('确定删除此合同？')) return;
+      await fetch(`/api/contracts/${id}`, { method: 'DELETE' });
+      location.reload();
+    }
+  </script>
+</body>
+</html>
