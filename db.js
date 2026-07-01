@@ -8,20 +8,18 @@ async function initDB() {
   if (db) return db;
   
   const SQL = await initSqlJs({
-    locateFile: file => `./node_modules/sql.js/dist/${file}`
+    locateFile: file => {
+      const nodeModulesPath = path.join(__dirname, 'node_modules', 'sql.js', 'dist', file);
+      if (fs.existsSync(nodeModulesPath)) {
+        return nodeModulesPath;
+      }
+      return `file://${path.join(__dirname, 'node_modules', 'sql.js', 'dist', file)}`;
+    }
   });
-  
-  const dbPath = path.join(__dirname, 'data', 'automation.db');
-  const exists = fs.existsSync(dbPath);
-  
-  if (exists) {
-    fs.unlinkSync(dbPath);
-  }
   
   db = new SQL.Database();
   createTables();
   insertDemoData();
-  saveDB();
   
   return db;
 }
@@ -143,12 +141,6 @@ function insertDemoData() {
 }
 
 function saveDB() {
-  const data = db.export();
-  const dir = path.join(__dirname, 'data');
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
-  }
-  fs.writeFileSync(path.join(dir, 'automation.db'), Buffer.from(data));
 }
 
 function query(sql) {
@@ -186,7 +178,6 @@ function query(sql) {
 
 function run(sql) {
   db.exec(sql);
-  saveDB();
   
   const lastIdResult = db.exec('SELECT last_insert_rowid() as id');
   const lastId = lastIdResult.length > 0 && lastIdResult[0].values.length > 0 
